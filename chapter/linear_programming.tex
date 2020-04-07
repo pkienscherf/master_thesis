@@ -1,14 +1,14 @@
-% everything of the following originate from the book 'Market Design' from Martin Bichler
-
 \section{Linear Programming}
 \label{sec:linear_progamming}
-This section will give an introduction into the basics of mathematical linear programming
-and linear programming duality.
-It will present the purpose and necessity of optimization models and will give
-an example how an optimization model is constructed. 
+This section gives an introduction into the basics of mathematical linear programming, 
+which forms the basis for the BTM applied in the BLEMS.
+It presents the purpose and necessity of optimization models, gives
+an example of how an optimization model is constructed and explains the duality theory,
+which is essential for determining the market prices in the BTM and for the developed 
+agent trade verification procedure, outlined later on in \ref{sec:agent_class}. Finally,
+the used algorithm to solve such optimization models is presented.
 
-To begin with, optimization models try to define in mathematical terms, the goal
-of solving a problem in the best or optimal way. 
+Optimization models mathematically define the goal of solving a problem in the optimal way.
 This can be applied in many different areas, for example, it might mean running a business to 
 maximize profit, designing a bridge to minimize weight or selecting a flight plan for an aircraft
 to minimize time or fuel use \shortcite{griva2009linear}. 
@@ -20,7 +20,7 @@ in the last decades, optimization models became a practical tool
 in business, science and engineering \shortcite{griva2009linear}. 
 Finally, it is possible to solve optimization problems with a huge set of variables. 
 
-Further, linear optimization, also known as a \textit{linear program}, refers to the optimization
+Linear optimization, also known as a \textit{linear program (LP)}, refers to the optimization
 of a linear function with the decision variables, $x_{1}, ..., x_{n}$ subject to 
 linear equality or inequality constraints. 
 As presented by \shortciteA{bichler2017market}, in canonical form 
@@ -28,13 +28,13 @@ a linear optimization model is given as:
 
 \begin{equation*}
     \begin{array}{ll@{}ll}
-        \text{max}  & \displaystyle\sum\limits_{j=1}^{n} c_{j}x_{j} &\\
-        \text{s.t.}& \displaystyle\sum\limits_{j=1}^{n} a_{ij}x_{j} \leq b_{i},  &&i=1 ,..., m\\
+        \text{min}  & \displaystyle\sum\limits_{j=1}^{n} c_{j}x_{j} &\\
+        \text{s.t.}& \displaystyle\sum\limits_{j=1}^{n} a_{ij}x_{j} \geq b_{i},  &&i=1 ,..., m\\
                     &                        x_{j} \geq 0, &&j=1 ,..., n
     \end{array}
 \end{equation*}
 
-However, a linear program can be modeled in different forms. It is also possible 
+However, a LP can be modeled in different forms. It is also possible 
 to write a model in the matrix-vector notation. To represent the above model in this form, letting
 $x=(x_{1}, ..., x_{n})^{T}$, $c=(c_{1}, ..., c_{n})^{T}$, $b=(b_{1}, ..., b_{m})^{T}$
 and name the matrix of the coefficients $a_{ij}$ by $A$. As introduced by \shortciteA{griva2009linear},
@@ -42,8 +42,8 @@ the model becomes:
 
 \begin{equation*}
     \begin{array}{ll@{}ll}
-        \text{max}  & \displaystyle c^{T}x &\\
-        \text{s.t.}& \displaystyle Ax \leq b&\\
+        \text{min}  & \displaystyle c^{T}x &\\
+        \text{s.t.}& \displaystyle Ax \geq b&\\
                     &                        x \geq 0
     \end{array}
 \end{equation*}
@@ -55,20 +55,20 @@ and the variables are unrestricted or restricted in sign \shortcite{bichler2017m
 
 \subsection{Duality Theory}
 \label{sec:duality_theory}
-In addition, for every linear program exists another problem, which
+For every LP exists another problem, which
 is called the \textit{dual} of the original linear problem, also known as the 
 \textit{primal} \shortcite{bichler2017market}.
-In the \textit{dual}, the roles of variables and constraints are reversed. 
-That means, every variable of the \textit{primal} becomes a constraint in the \textit{dual},
-and every constraint in the \textit{primal} becomes a variable in 
-the \textit{dual} \shortcite{griva2009linear}.
-For instance, if the \textit{primal} has $n$ variables and $m$ constraints, the \textit{dual}
-will have $m$ variables and $n$ constraints. Further, the \textit{primal} objective coefficients 
+In the dual, the roles of variables and constraints are reversed. 
+That means, every variable of the primal becomes a constraint in the dual,
+and every constraint in the primal becomes a variable in 
+the dual \shortcite{griva2009linear}.
+For instance, if the primal has $n$ variables and $m$ constraints, the dual
+will have $m$ variables and $n$ constraints. Further, the primal objective coefficients 
 are the coefficients on the right-hand side of 
-the \textit{dual}, and vice versa.
-Finally, the transposed coefficient matrix of the \textit{primal} constitutes the matrix in the 
-\textit{dual} \shortcite{griva2009linear}.
-To give an example of a \textit{primal} and the corresponding \textit{dual} linear program,
+the dual, and vice versa.
+Finally, the transposed coefficient matrix of the primal constitutes the matrix in the 
+dual \shortcite{griva2009linear}.
+To give an example of a primal and the corresponding dual LP,
 the representation by \shortciteA{bichler2017market} is considered:
 
 \begin{equation}
@@ -90,23 +90,23 @@ the representation by \shortciteA{bichler2017market} is considered:
 \end{equation}
 
 
-Next, the motivation of the duality theory can explained by the issue of trying to find 
-bounds on the value of the optimal solution to a linear programming problem. 
-If the \textit{primal} is a minimization problem, the \textit{dual} represents a lower bound
-on the value of the optimal solution, otherwise, if the \textit{primal} is a maximization problem,
-the \textit{dual} represents an upper bound \shortcite{bichler2017market}.
-To illustrate the concept and motivation of duality theory more tangible, an example stated by 
+Next, the motivation of the duality theory can be explained by the issue of trying to find 
+bounds on the value of the optimal solution to a LP. 
+If the primal is a minimization problem, the dual represents a lower bound
+on the value of the optimal solution, otherwise, if the primal is a maximization problem,
+the dual represents an upper bound \shortcite{bichler2017market}.
+To illustrate the concept and motivation of duality theory more tangibly, an example stated by 
 \shortciteA{bichler2017market} is given. 
-In an application, the variables in the \textit{primal} linear problem stand for consumer products and
+In an application, the variables in the primal linear problem stand for consumer products and
 the objective coefficients represent the profits linked to the production of those consumer products. 
-In this case, the objective in the \textit{primal} describes directly the relation between a change
-in the production of the products and profit. Whereas, the constraints in the \textit{primal} 
+In this case, the objective in the primal describes directly the relation between a change
+in the production of the products and profit. Whereas, the constraints in the primal 
 describe the availability of raw materials. Consequently, an increase in the availability of 
-raw materials needed for the production of the consumer products, enables an increase in production,
+raw materials needed for the production of the consumer products enables an increase in production,
 and finally an increase in the overall profit. 
-However, the \textit{primal} problem does not outline this relationship reasonable. Hence, one of 
-the benefit of the \textit{dual} is to properly show the effect of changes in the constraints on the
-value of the objective. Due to this, the variables in a \textit{dual} linear program often called 
+However, the primal problem does not outline this relationship reasonable. Hence, one of 
+the benefits of the dual is to properly show the effect of changes in the constraints on the
+value of the objective. Due to this, the variables in a dual LP often called 
 \textit{shadow prices}, since they describe the hidden costs associated with the constraints. 
 
 \subsubsection{Weak Duality Theorem}
@@ -128,7 +128,7 @@ this result is true in general and is described as the \textit{Weak Duality Theo
 \end{theorem}
 
 Regarding to \shortciteA{griva2009linear}, there are some logical corollaries 
-of the \textit{Weak Duality Theorem}:
+of the Weak Duality Theorem:
 
 \begin{corollary}
     If the primal is unbounded, then the dual is infeasible. 
@@ -144,11 +144,11 @@ of the \textit{Weak Duality Theorem}:
 
 \subsubsection{Strong Duality Theorem}
 \label{sec:strong_duality_theorem}
-Concerning to corollary \ref{strong_duality_corollary}, it is possible to verify if 
-the points x and y are optimal solutions, without solving the corresponding linear programs. 
-Furthermore, this corolary is also used in the proof of strong duality \shortcite{griva2009linear}. 
+Concerning corollary \ref{strong_duality_corollary}, it is possible to verify if 
+the points x and y are optimal solutions, without solving the corresponding LPs. 
+Furthermore, this corollary is also used in the proof of strong duality \shortcite{griva2009linear}. 
 The \textit{Strong Duality Theorem} describes, that for linear programming there 
-is never a gap between the \textit{primal} and the \textit{dual} 
+is never a gap between the primal and the dual 
 optimal objective values \shortcite{vanderbei2015linear}.
 
 \begin{theorem}
@@ -165,15 +165,13 @@ optimal objective values \shortcite{vanderbei2015linear}.
 \end{theorem}
 
 \subsubsection{Simplex-Method}
-This subsection will give a brief introduction to the \textit{simplex-method}. 
-To start with, in the field of linear programming, the \textit{simplex-method} 
-is the most widely used algorithm. 
-This method was developed around 1940 and had several competitors at that time.
-However, the algorithm was able to assert itself due to its efficiency. \shortcite{griva2009linear}
-In general, the \textit{simplex-method} is an iterative algorithm, used to solve 
-linear programming models \shortcite{griva2009linear}. To apply the algorithm to a model, 
+This subsection will give a brief introduction to the simplex-method.
+In the field of linear programming, the simplex-method 
+is the most widely used algorithm due to its  efficiency \shortcite{griva2009linear}.
+In general, the simplex-method is an iterative algorithm, used to solve 
+a LP \shortcite{griva2009linear}. To apply the algorithm to a LP, 
 it must be in standard form \shortcite{Luenberger2008}. According to \shortciteA{griva2009linear}, 
-we consider the following linear progamming model:
+we consider the following LP:
 
 \begin{equation*}
     \begin{array}{ll@{}ll}
@@ -185,8 +183,8 @@ we consider the following linear progamming model:
     \end{array}
 \end{equation*}
 
-Next, we give an example to illustrate how to convert a linear program into standard form.
-To achieve that, the so called \textit{slack variables} will be added, which represents the 
+Next, we give an example to illustrate how to convert a LP into standard form.
+To achieve that, the so-called \textit{slack variables} will be added, which represents the 
 difference between the right-hand side and the left-hand side. 
 
 \begin{equation*}
@@ -200,35 +198,16 @@ difference between the right-hand side and the left-hand side.
 \end{equation*}
 
 
-Finally, with the linear progamming model in standard form, the idea of the \textit{simplex-method}
+Finally, with the LP in standard form, the idea of the simplex-method
 is to iteratively proceed from one basic feasible solution to another \shortcite{Luenberger2008}.
-Thereby, it always looks for a feasible solution which is better then the one before. 
-The definition of better in this case depends on the nature of the linear problem. 
-The process is performed until a solution is reached which cannot 
+Thereby, it always looks for a feasible solution which is better than the one before. 
+The definition of better, in this case, depends on the nature of the linear problem. 
+The process is performed until a solution is reached, which cannot 
 be improved anymore. In the end, this final solution is then an optimal solution \shortcite{vanderbei2015linear}. 
 
+
 \clearpage
-\begin{comment}
 
-
-
-# market design
-Mathematical Optimization plays a central role in the design and analysis of multi-object 
-markets and also provides a central foundation for theoretical models of mulit-object markets. 
-
-However, market design is more than mathematical programming, as it takes into consideration bidding
-strategies and human behavior. Ignoring bidding strategies and different types of manipulation 
-in market-based resource allocation is like optimizing a problem with the wrong parameters. 
-
-Overall, makret design aims at design principles and rules for market institutions which are robust
-against manupulation and allow bidders to express their preferences, so that the designer can aim 
-for good or even optimal allocations. This is similar to network security, where designers aim 
-for secure network protocols that are hard to tamper with, 
-knowing that there is no absolute security
-
-# closed order book
-
-\end{comment}
 
 
 

@@ -1,7 +1,8 @@
-\documentclass[a4paper, twoside, 12pt]{article}
+\documentclass[a4paper, 12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
+\usepackage{acronym}
 \usepackage{longtable}
 \usepackage{hyperref}
 \usepackage{caption}
@@ -74,7 +75,7 @@
 \newcommand{\studentID}{5377277} %input student ID
 \newcommand{\thesistype}{Master Thesis} % Set either to Bachelor or Master
 \newcommand{\supervisor}{Univ.-Prof. Dr. Wolfgang Ketter}
-\newcommand{\cosupervisor}{Philipp Kienscherf}
+\newcommand{\cosupervisor}{Philipp A. Kienscherf}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %DOCUMENT
@@ -97,10 +98,43 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \thispagestyle{empty}
+
 \section*{Abstract}
 
+Due to the constantly increasing generation from distributed renewable energy resources and the 
+difficulties of integrating these energy resources into the existing electric grid, new market approaches
+are needed. 
+Peer-to-peer energy trading in local energy markets provides a possible solution to the stated issues,
+but it requires advanced communication und data exchanges between the different parties, which makes 
+central management and operation more and more challenging.
+As local energy markets need local distributed control and management techniques, a new and innovative 
+information communication technology is required, to which the emerging distributed ledger technology
+provides a possible solution.
+Therefore, an open blockchain-based local energy market simulation platform is developed in this research.
+The implementation
+based on a market-based optimization algorithm, introduced by \shortcite{guo2007market}, that solves a 
+distributed system optimization problem by self-interested agents iteratively trading bundled resources in a double auction market.
+The underlying information communication technology of the market-based optimization algorithm 
+is provided by the emerging blockchain technology.
+The conducted research provides a decentralized implementation of the proposed market-based optimization algorithm, 
+in which the transparency is enhanced and the required level of trust is reduced due to the application of 
+the blockchain technology. Furthermore, it provides a detailed explanation of the implementation and deals with 
+the special features of the blockchain functionality, whereby technical barriers in using the developed simulation are 
+removed and researchers are incentivized to design and test their artifacts by using the developed open blockchain-based 
+local energy market simulation platform.
+ 
+
+
+\begin{comment}
 [Abstract goes here (max. 1 page)]
 
+* Purpose
+* Problem
+* Methods
+* Results
+* Conclusion
+        
+\end{comment}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,6 +149,26 @@
 \listoftables
 \clearpage
 \lstlistoflistings
+\clearpage
+
+\section*{List of Abbreviations} \markboth{LIST OF ABBREVIATIONS}{}
+\begin{acronym}[GCRM]
+        \acro{ABI}{Contract Application Binary Interface}
+        \acro{BDP}{Bundle Determination Problem}
+        \acro{BLEMS}{Blockchain-based Local Energy Market Simulation}
+        \acro{BTM}{Bundle Trading Market Framework}
+        \acro{CB}{Competitive Benchmarking}
+        \acro{DLT}{Distributed Ledger Technology}
+        \acro{EMTS}{Energy Management Trading System}
+        \acro{ICT}{Information Communication Technology}
+        \acro{LEM}{Local Energy Markets}
+        \acro{LP}{Linear Program}
+        \acro{MMP}{Market Matching Problem}
+        \acro{PV}{Photovoltaic Systems}
+        \acro{PoW}{Proof of Work}
+        \acro{P2P}{Peer-to-Peer}
+        \acro{RES}{Renewabe Energy Sources}
+\end{acronym}
 \clearpage
 
 \pagenumbering{arabic}
@@ -144,6 +198,8 @@
 
 \input{./chapter/implementation}
 
+\input{./chapter/conclusion}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %APPENDICES
@@ -152,9 +208,22 @@
 \clearpage
 \appendix
 \renewcommand*{\thesection}{\Alph{section}}\textbf{}
+\renewcommand\thefigure{\thesection.\arabic{figure}}
+\renewcommand*\thelstlisting{\Alph{section}.\arabic{lstlisting}}
 
-% APPENDIX A
-\input{appendices/appendix_1.tex}
+% APPENDIX
+\setcounter{figure}{0}
+\setcounter{lstlisting}{0}
+
+\input{appendices/additional_agent.tex}
+
+\input{appendices/additional_offchain_dealer.tex}
+
+\input{appendices/log_file.tex}
+
+\input{appendices/installation_guide.tex}
+
+\input{appendices/digital_resources.tex}
 
 
 
